@@ -25,6 +25,12 @@ Rubric:
 6. Both images are displayed at the end.
 7. Calculation times and speedup obtained are incuded in the Readme.
 
+**Speedup**
+
+CPU time avg: 140823.5
+GPU time avg: 185461.16
+Speedup: 75.93%
+
 **NOTES**
 
 1. Must fix compilation error.

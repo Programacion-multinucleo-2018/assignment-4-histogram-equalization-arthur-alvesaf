@@ -4,6 +4,8 @@
 
 // Includes
 #include <iostream>
+// #include <chrono>
+#include <time.h>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -139,8 +141,19 @@ int main(int argc, char *argv[])
   cv::Mat output(input_gray.rows, input_gray.cols, input_gray.type());
 
 	//Call the image manipulation function
-  // fix_contrast_image_cpu(input_gray, output);
+  clock_t t1, t2;
+  t1 = clock();
+  fix_contrast_image_cpu(input_gray, output);
+  t2 = clock();
+  float totalTime = ((float)t2-(float)t1);
+  cout << "Time for multiplying on cpu: " << totalTime << endl;
+
+  // Call the image manipulation function in gpu
+  t1 = clock();
 	fix_contrast_image_gpu(input_gray, output);
+  t2 = clock();
+  totalTime = ((float)t2-(float)t1);
+  cout << "Time for multiplying on cpu: " << totalTime << endl;
 
 	//Allow the windows to resize
 	namedWindow("Input", cv::WINDOW_NORMAL);
