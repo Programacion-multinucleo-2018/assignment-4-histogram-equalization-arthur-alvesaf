@@ -63,12 +63,12 @@ void fix_contrast_image_cpu(const cv::Mat& input, cv::Mat& output)
   }
 }
 
-void fix_contrast_image_gpu(const cv::Mat &input, const cv::Mat &output) {
+void fix_contrast_image_gpu(const cv::Mat &input, cv::Mat &output) {
   // Set up device
   int dev = 0;
   cudaDeviceProp deviceProp;
   cudaGetDeviceProperties(&deviceProp, dev);
-  printf("Using Device %d: %s\n", dev, deviceProp.name);
+  cout << "Using Device "<< dev << deviceProp.name << endl;
   cudaSetDevice(dev);
 
   cout << "Input image step: " << input.step << " rows: " << input.rows << " cols: " << input.cols << endl;
