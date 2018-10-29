@@ -24,3 +24,10 @@ Rubric:
 5. For the GPU version, used shared memory where necessary.
 6. Both images are displayed at the end.
 7. Calculation times and speedup obtained are incuded in the Readme.
+
+**NOTES**
+
+1. Must fix compilation error.
+2. Did not use shared memory.
+
+**Grade: 70**
