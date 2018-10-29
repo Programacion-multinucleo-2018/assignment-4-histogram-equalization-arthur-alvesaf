@@ -4,7 +4,6 @@
 
 // Includes
 #include <iostream>
-// #include <chrono>
 #include <time.h>
 
 #include <opencv2/core/core.hpp>
@@ -13,6 +12,8 @@
 #include <cuda_runtime.h>
 
 using namespace std;
+
+#define VERBOSE 0
 
 __global__ void fill_histogram(unsigned char *input, int width, int height, int *histogram) {
   unsigned int ix = threadIdx.x + blockIdx.x * blockDim.x;
@@ -43,7 +44,7 @@ __global__ void equalize_image(unsigned char *input, unsigned char *output, int 
 // Histogram equalization function given an opencv mat and output CPU
 void fix_contrast_image_cpu(const cv::Mat& input, cv::Mat& output)
 {
-	cout << "Input image step: " << input.step << " rows: " << input.rows << " cols: " << input.cols << endl;
+	if (VERBOSE) cout << "Input image step: " << input.step << " rows: " << input.rows << " cols: " << input.cols << endl;
 	int histogram[256] = {0};
 
 	// Count pixel occurence on histogram
@@ -70,10 +71,10 @@ void fix_contrast_image_gpu(const cv::Mat &input, cv::Mat &output) {
   int dev = 0;
   cudaDeviceProp deviceProp;
   cudaGetDeviceProperties(&deviceProp, dev);
-  cout << "Using Device "<< dev << deviceProp.name << endl;
+  if (VERBOSE) cout << "Using Device "<< dev << deviceProp.name << endl;
   cudaSetDevice(dev);
 
-  cout << "Input image step: " << input.step << " rows: " << input.rows << " cols: " << input.cols << endl;
+  if (VERBOSE) cout << "Input image step: " << input.step << " rows: " << input.rows << " cols: " << input.cols << endl;
   const dim3 block (32,32);
   const dim3 grid ( (int)ceil((input.cols) / block.x),
   (int)ceil((input.rows) / block.y));
@@ -146,14 +147,14 @@ int main(int argc, char *argv[])
   fix_contrast_image_cpu(input_gray, output);
   t2 = clock();
   float totalTime = ((float)t2-(float)t1);
-  cout << "Time for multiplying on cpu: " << totalTime << endl;
+  if (VERBOSE) cout << "Time for multiplying on cpu: " << totalTime << endl;
 
   // Call the image manipulation function in gpu
   t1 = clock();
 	fix_contrast_image_gpu(input_gray, output);
   t2 = clock();
   totalTime = ((float)t2-(float)t1);
-  cout << "Time for multiplying on cpu: " << totalTime << endl;
+  if (VERBOSE) cout << "Time for multiplying on cpu: " << totalTime << endl;
 
 	//Allow the windows to resize
 	namedWindow("Input", cv::WINDOW_NORMAL);
